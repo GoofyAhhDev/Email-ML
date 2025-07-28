@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 
-df = pd.read_csv('datasets/email_phishing_data.csv')
+df = pd.read_csv('datasets/all_combined_features.csv')
 
 print("Columns:", df.columns)
 
@@ -16,7 +16,8 @@ feature_columns = [
     'num_unique_domains',
     'num_email_addresses',
     'num_spelling_errors',
-    'num_urgent_keywords'
+    'num_urgent_keywords',
+    'num_extortion_keywords'
 ]
 
 X = df[feature_columns]

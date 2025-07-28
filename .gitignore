@@ -1,1 +1,4 @@
 *.pkl
+rf_email_model.pkl
+rf_phishing_model.pkl
+tfidf_vectorizer.pkl
