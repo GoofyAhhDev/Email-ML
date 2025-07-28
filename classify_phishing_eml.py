@@ -1,6 +1,7 @@
 import sys
 import re
 from email import policy
+import matplotlib.pyplot as plt
 from email.parser import BytesParser
 import joblib
 import pandas as pd
@@ -103,7 +104,7 @@ def count_urgent_keywords(text):
 def count_keywords(text, keywords):
     text_lower = text.lower()
     return sum(text_lower.count(k) for k in keywords)
-    
+
 def extract_features(eml_path):
     text = extract_email_text(eml_path)
     num_words, num_unique_words, num_stopwords = count_words(text)
@@ -132,6 +133,18 @@ def classify_features(features_list):
     print(f"Prediction: {label_map.get(pred[0], pred[0])}")
     return pred[0]
 
+def print_feature_importance():
+    clf = joblib.load('rf_phishing_model.pkl')
+    importances = clf.feature_importances_
+    importance_list = sorted(zip(feature_columns, importances), key=lambda x: x[1], reverse=True)
+    print("\nFeature importances (sorted):")
+    print("-" * 35)
+    print("{:<25} {:>8}".format("Feature", "Importance"))
+    print("-" * 35)
+    for feat, imp in importance_list:
+        print("{:<25} {:>7.1f}%".format(feat, imp * 100))
+    print("-" * 35)
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python classify_phishing_eml.py path/to/email.eml")
@@ -142,3 +155,4 @@ if __name__ == "__main__":
     print(','.join(str(x) for x in features))
     print("\nClassifying...")
     classify_features(features)
+    print_feature_importance()
